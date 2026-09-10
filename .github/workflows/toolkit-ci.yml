@@ -1,0 +1,49 @@
+# Toolkit CI.
+#
+# Runs pytest + ruff + mypy against toolkit/ on every push and PR.
+# Implementation lands when CR-DEA-RP-01 is accepted and the toolkit
+# modules have actual code; this scaffold defines the workflow shape.
+
+name: Toolkit CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'toolkit/**'
+      - '.github/workflows/toolkit-ci.yml'
+  pull_request:
+    paths:
+      - 'toolkit/**'
+      - '.github/workflows/toolkit-ci.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install
+        run: |
+          cd toolkit
+          pip install -e ".[dev]"
+      - name: Lint (ruff)
+        run: |
+          cd toolkit
+          ruff check src tests
+      - name: Type-check (mypy)
+        run: |
+          cd toolkit
+          mypy src
+      - name: Test (pytest)
+        run: |
+          cd toolkit
+          pytest --cov=dea_release_package --cov-report=term-missing

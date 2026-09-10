@@ -1,0 +1,17 @@
+dea-release-package
+Copyright 2026 TechNeHub Labs
+
+This product includes software developed at
+TechNeHub Labs (https://github.com/technehub-labs).
+
+This product is governed by the OpenDEA Release Package Program CRs,
+which are licensed under CC-BY-4.0 and published at:
+https://github.com/technehub-labs/dea-release-package/tree/main/change-requests
+
+This product references the OpenDEA Enterprise Concept Framework (ECF),
+which is governed by dea-metaframework CR-ECF-001..008 and licensed under
+CC-BY-4.0.
+
+This product adopts the OpenDEA Assessment Metamodel compatibility
+vocabulary, which is governed by dea-metamodel CR-AM-02 §11 and licensed
+under CC-BY-4.0.

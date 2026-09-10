@@ -1,0 +1,47 @@
+# Reusable workflow: release-package
+#
+# Behaviour: see CR-DEA-RP-01 §8.1 (Sub-system 1, per-repo package gate).
+# Called by each catalog repo's validate-release-package.yml workflow on PR,
+# and by the catalog repo's publish-versioned.yml on tag push.
+
+name: Release Package
+
+on:
+  workflow_call:
+    inputs:
+      catalog_repo:
+        description: 'Catalog repo (e.g. technehub-labs/dea-catalog-processes)'
+        required: true
+        type: string
+      tag:
+        description: 'Release tag (e.g. v1-alpha.3); empty for dry-run'
+        required: false
+        type: string
+        default: ''
+      mode:
+        description: 'dry-run | build | strict'
+        required: false
+        type: string
+        default: 'dry-run'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  build-package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      # Placeholder step; replace with toolkit invocation once implemented.
+      - name: Build / dry-run / validate release package
+        run: |
+          echo "Scaffold: release-package job."
+          echo "Inputs: repo=${{ inputs.catalog_repo }} tag=${{ inputs.tag }} mode=${{ inputs.mode }}"
+          echo "Implementation: CR-DEA-RP-01 §8.1."
+          echo "Toolkit entry: python -m dea_release_package.cli build-package ${{ inputs.catalog_repo }} ${{ inputs.tag }} --mode ${{ inputs.mode }}"

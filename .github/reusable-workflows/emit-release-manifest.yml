@@ -1,0 +1,51 @@
+# Reusable workflow: emit-release-manifest
+#
+# Behaviour: see CR-DEA-RP-02 §10.2.
+# Called by each catalog repo's publish-versioned.yml on tag push. Pulls
+# the GitHub Release's asset checksums, constructs the manifest, opens a
+# PR against technehub-labs/dea-release-package/federation-registry/.
+
+name: Emit Release Manifest
+
+on:
+  workflow_call:
+    inputs:
+      catalog_repo:
+        description: 'Catalog repo (e.g. technehub-labs/dea-catalog-processes)'
+        required: true
+        type: string
+      tag:
+        description: 'Release tag (e.g. v1-alpha.3)'
+        required: true
+        type: string
+      commit_sha:
+        description: 'Full 40-char commit SHA of the release'
+        required: true
+        type: string
+    secrets:
+      REGISTRY_TOKEN:
+        description: 'PAT scoped to dea-release-package with Contents: Write (Phase 1)'
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  emit-manifest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: technehub-labs/dea-release-package
+          fetch-depth: 0
+          token: ${{ secrets.REGISTRY_TOKEN }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      # Placeholder step; replace with toolkit invocation once implemented.
+      - name: Emit manifest
+        run: |
+          echo "Scaffold: emit-manifest job."
+          echo "Inputs: repo=${{ inputs.catalog_repo }} tag=${{ inputs.tag }} sha=${{ inputs.commit_sha }}"
+          echo "Implementation: CR-DEA-RP-02 §10.2."
+          echo "Toolkit entry: python -m dea_release_package.cli emit-manifest ${{ inputs.catalog_repo }} ${{ inputs.tag }} ${{ inputs.commit_sha }}"

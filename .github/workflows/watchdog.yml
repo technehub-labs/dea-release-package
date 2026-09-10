@@ -1,0 +1,108 @@
+# Federation Watchdog (Sub-system 3).
+#
+# Behaviour: see CR-DEA-RP-03.
+# Three jobs (pin-coherence, cross-version, asset-drift) plus a derived
+# timeline job and an auto-resolution job.
+#
+# Triggers: nightly at 03:00 UTC + manual dispatch.
+# Outputs: GitHub Issues on technehub-labs/dea-release-package for every
+#          unacknowledged divergence; regenerated timeline YAML.
+
+name: Federation Watchdog
+
+on:
+  schedule:
+    - cron: '0 3 * * *'
+  workflow_dispatch:
+    inputs:
+      job_filter:
+        description: 'Run only specific jobs (pin-coherence|cross-version|asset-drift|all)'
+        required: false
+        default: 'all'
+
+permissions:
+  contents: read
+  issues: write
+
+# NOTE: This is a scaffold workflow. Implementation lands when CR-DEA-RP-01
+# is accepted. The job definitions below mirror CR-DEA-RP-03 §6.
+jobs:
+  pin-coherence:
+    if: ${{ github.event.inputs.job_filter == 'all' || github.event.inputs.job_filter == 'pin-coherence' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      # Placeholder step; replace with toolkit invocation once implemented.
+      - name: Run pin-coherence watchdog
+        run: |
+          echo "Scaffold: pin-coherence watchdog job."
+          echo "Implementation: CR-DEA-RP-03 §4.1."
+          echo "Toolkit entry: python -m dea_release_package.cli watchdog pin-coherence"
+
+  cross-version:
+    if: ${{ github.event.inputs.job_filter == 'all' || github.event.inputs.job_filter == 'cross-version' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run cross-version watchdog
+        run: |
+          echo "Scaffold: cross-version watchdog job."
+          echo "Implementation: CR-DEA-RP-03 §4.2."
+          echo "Toolkit entry: python -m dea_release_package.cli watchdog cross-version"
+
+  asset-drift:
+    if: ${{ github.event.inputs.job_filter == 'all' || github.event.inputs.job_filter == 'asset-drift' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run asset-drift watchdog
+        run: |
+          echo "Scaffold: asset-drift watchdog job."
+          echo "Implementation: CR-DEA-RP-03 §4.3."
+          echo "Toolkit entry: python -m dea_release_package.cli watchdog asset-drift"
+
+  timeline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Regenerate timeline
+        run: |
+          echo "Scaffold: timeline generation job."
+          echo "Implementation: CR-DEA-RP-03 §4.4."
+          echo "Toolkit entry: python -m dea_release_package.cli watchdog timeline"
+
+  resolver:
+    needs: [pin-coherence, cross-version, asset-drift, timeline]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Auto-resolve closed issues
+        run: |
+          echo "Scaffold: auto-resolution pass."
+          echo "Implementation: CR-DEA-RP-03 §5.2."
+          echo "Toolkit entry: python -m dea_release_package.cli watchdog resolve"

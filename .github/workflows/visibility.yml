@@ -1,0 +1,36 @@
+# Visibility Surfaces (Sub-system 4).
+#
+# Behaviour: see CR-DEA-RP-04.
+# Regenerates federation-registry/README.md (Registry Index Page) on every
+# push to main that touches federation-registry/.
+
+name: Visibility
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'federation-registry/**'
+      - 'toolkit/src/dea_release_package/visibility/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  index:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      # Placeholder step; replace with toolkit invocation once implemented.
+      - name: Regenerate registry index
+        run: |
+          echo "Scaffold: registry index regeneration."
+          echo "Implementation: CR-DEA-RP-04 §4.3."
+          echo "Toolkit entry: python -m dea_release_package.cli visibility index"

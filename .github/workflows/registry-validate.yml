@@ -1,0 +1,38 @@
+# Registry validation (Sub-system 2).
+#
+# Behaviour: see CR-DEA-RP-02 §10.1.
+# Runs on every PR that touches federation-registry/, validates new manifests
+# against schemas/registry-schema-v1.schema.json, asserts filename conventions,
+# and rejects in-place edits to existing manifests.
+
+name: Registry Validate
+
+on:
+  pull_request:
+    paths:
+      - 'federation-registry/**'
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      # Placeholder step; replace with toolkit invocation once implemented.
+      - name: Validate manifests
+        run: |
+          echo "Scaffold: registry validate job."
+          echo "Implementation: CR-DEA-RP-02 §10.1."
+          echo "Toolkit entry: python -m dea_release_package.registry.validate --strict"
+      - name: Lint manifests
+        run: |
+          echo "Scaffold: registry lint job."
+          echo "Toolkit entry: python -m dea_release_package.registry.lint"

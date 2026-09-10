@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+message: |
+  If you reference the Release Package Program in academic work, please cite
+  the umbrella CR (CR-DEA-RP-01) as the primary reference.
+type: software
+title: "OpenDEA Release Package Program"
+version: 0.1.0
+date-released: 2026-09-10
+url: "https://github.com/technehub-labs/dea-release-package"
+repository-code: "https://github.com/technehub-labs/dea-release-package"
+license: Apache-2.0
+authors:
+  - family-names: TechNeHub Labs Architecture Board
+    email: architecture@technehub.com
+keywords:
+  - OpenDEA
+  - release-engineering
+  - federation
+  - catalog
+  - ECF
+  - Enterprise Concept Framework
+references:
+  - type: document
+    title: "CR-DEA-RP-01: Release Package Program (umbrella CR)"
+    url: "https://github.com/technehub-labs/dea-release-package/blob/main/change-requests/CR-DEA-RP-01-release-package-program.md"
+  - type: document
+    title: "CR-AM-02 §11: Assessment Metamodel Compatibility Vocabulary"
+    url: "https://github.com/technehub-labs/dea-metamodel/blob/main/change-requests/CR-AM-02.md"

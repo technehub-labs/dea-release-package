@@ -1,0 +1,43 @@
+# Federation Audit.
+#
+# Behaviour: see CR-DEA-RP-03 §6 (cross-catalog nightly audit).
+# Runs across every dea-catalog-* repo on nightly cron; flags any catalog
+# whose latest release fails conformance or whose GitHub Release asset
+# zip doesn't match the workflow-built artifact.
+
+name: Federation Audit
+
+on:
+  schedule:
+    - cron: '0 4 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  audit-all-catalogs:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        repo:
+          - dea-catalog-business-capabilities
+          - dea-catalog-processes
+          - dea-catalog-business-objects
+          - dea-catalog-actors
+          - dea-catalog-stakeholders
+          - dea-catalog-organizational-units
+          - dea-catalog-digital-business-service-factory
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: technehub-labs/${{ matrix.repo }}
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Audit ${{ matrix.repo }}
+        run: |
+          echo "Scaffold: federation audit for ${{ matrix.repo }}."
+          echo "Implementation: CR-DEA-RP-03 §6 + CR-DEA-RP-01 §8."
